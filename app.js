@@ -54,6 +54,7 @@
   // 历史列表相关元素
   const historyListEl = document.getElementById("history-list");
   const historyEmptyEl = document.getElementById("historyEmpty");
+  const exportBtn = document.getElementById("export-btn");
 
   // ==================== 数据持久化层 ====================
   /**
@@ -602,9 +603,76 @@
     amountInput.focus();
   }
 
+  /**
+   * 导出账目数据为 CSV 文件
+   * 将当前账目数组转换为 CSV 格式，并触发浏览器下载
+   * 添加 BOM 头防止 Excel 打开时中文乱码
+   */
+  function exportToCSV() {
+    if (!records || records.length === 0) {
+      alert("暂无账目数据可导出");
+      return;
+    }
+
+    // CSV 表头
+    const headers = ["日期", "类型", "分类", "金额", "备注"];
+    
+    // 按日期排序（从旧到新）
+    const sortedRecords = records.slice().sort(function (a, b) {
+      return new Date(a.date) - new Date(b.date);
+    });
+
+    // 构建 CSV 内容
+    const csvRows = [];
+    csvRows.push(headers.join(","));
+
+    sortedRecords.forEach(function (record) {
+      const dateStr = formatDate(record.date);
+      const typeStr = record.type === "expense" ? "支出" : "收入";
+      const categoryStr = record.category;
+      const amountStr = record.amount.toFixed(2);
+      const noteStr = ""; // 备注字段，当前版本暂未实现
+
+      // 处理可能包含逗号的字段，用引号包裹
+      const row = [
+        `"${dateStr}"`,
+        `"${typeStr}"`,
+        `"${categoryStr}"`,
+        amountStr,
+        `"${noteStr}"`
+      ];
+      csvRows.push(row.join(","));
+    });
+
+    // 添加 BOM 头防止 Excel 中文乱码
+    const csvContent = "\uFEFF" + csvRows.join("\n");
+
+    // 创建 Blob 对象
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+
+    // 创建临时下载链接
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    
+    link.setAttribute("href", url);
+    link.setAttribute("download", "vibe_wallet_history.csv");
+    link.style.visibility = "hidden";
+    
+    document.body.appendChild(link);
+    link.click();
+    
+    // 清理
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+
   // ==================== 事件绑定 ====================
   form.addEventListener("submit", handleFormSubmit);
   typeSelect.addEventListener("change", syncCategoryWithType);
+  
+  if (exportBtn) {
+    exportBtn.addEventListener("click", exportToCSV);
+  }
 
   // ==================== 应用初始化 ====================
   // 按顺序执行初始化流程

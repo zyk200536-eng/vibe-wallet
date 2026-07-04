@@ -364,6 +364,41 @@ body {
   grid-column: 1 / -1;
 }
 
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--gap-4xl);
+}
+
+.section-header .card__heading {
+  margin-bottom: 0;
+}
+
+.btn-secondary {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--neon-cyan);
+  border-radius: var(--radius-sm);
+  background: rgba(34, 211, 238, 0.1);
+  color: var(--neon-cyan);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  outline: none;
+}
+
+.btn-secondary:hover {
+  background: rgba(34, 211, 238, 0.2);
+  box-shadow: 0 0 15px rgba(34, 211, 238, 0.3);
+  transform: translateY(-1px);
+}
+
+.btn-secondary:active {
+  transform: translateY(0);
+}
+
 .history-list {
   display: flex;
   flex-direction: column;
