@@ -1,0 +1,473 @@
+/* ==================== 全局变量 ==================== */
+:root {
+  /* 核心霓虹色系 */
+  --neon-purple: #a855f7;
+  --neon-cyan: #22d3ee;
+  --neon-pink: #ec4899;
+  
+  /* 背景色系 */
+  --bg-deep: #0d0d11;
+  --card-bg: rgba(25, 25, 35, 0.6);
+  --input-bg: rgba(15, 15, 22, 0.7);
+  
+  /* 文字色系 */
+  --text-primary: #f0f0f5;
+  --text-muted: #8b8b9e;
+  
+  /* 边框与装饰 */
+  --card-border: rgba(168, 85, 247, 0.25);
+  --border-purple: rgba(168, 85, 247, 0.15);
+  --border-purple-light: rgba(168, 85, 247, 0.1);
+  
+  /* 阴影效果 */
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 0 30px rgba(168, 85, 247, 0.06);
+  --shadow-card-hover: 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 0 40px rgba(34, 211, 238, 0.08);
+  --shadow-button: 0 4px 20px rgba(168, 85, 247, 0.35);
+  --shadow-button-hover: 0 6px 28px rgba(168, 85, 247, 0.5);
+  --shadow-delete-hover: 0 0 15px rgba(236, 72, 153, 0.4);
+  
+  /* 光晕效果 */
+  --glow-purple: rgba(168, 85, 247, 0.15);
+  --glow-cyan: rgba(34, 211, 238, 0.1);
+  --glow-purple-focus: rgba(168, 85, 247, 0.15);
+  --glow-cyan-focus: rgba(34, 211, 238, 0.05);
+  
+  /* 布局尺寸 */
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-xs: 6px;
+  --radius-xxs: 4px;
+  --blur: 20px;
+  --blur-glow: 120px;
+  
+  /* 间距 */
+  --gap-sm: 0.25rem;
+  --gap-md: 0.4rem;
+  --gap-lg: 0.75rem;
+  --gap-xl: 1rem;
+  --gap-2xl: 1.1rem;
+  --gap-3xl: 1.5rem;
+  --gap-4xl: 1.75rem;
+  
+  /* 过渡时间 */
+  --transition-fast: 0.2s;
+  --transition-normal: 0.25s;
+  --transition-slow: 0.3s;
+  --transition-slower: 0.5s;
+}
+
+/* ==================== 基础重置 ==================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ==================== 环境光晕效果 ==================== */
+.bg-glow {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(var(--blur-glow));
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bg-glow--purple {
+  width: 500px;
+  height: 500px;
+  background: var(--glow-purple);
+  top: -150px;
+  left: -100px;
+}
+
+.bg-glow--cyan {
+  width: 450px;
+  height: 450px;
+  background: var(--glow-cyan);
+  bottom: -100px;
+  right: -80px;
+}
+
+/* ==================== 头部区域 ==================== */
+.header {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 3rem 1.5rem 2rem;
+}
+
+.title {
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  background: linear-gradient(135deg, var(--neon-purple), var(--neon-cyan), var(--neon-pink));
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 6s ease-in-out infinite;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.title__icon {
+  -webkit-text-fill-color: var(--neon-cyan);
+  font-size: 0.85em;
+  animation: pulse 3s ease-in-out infinite;
+}
+
+.subtitle {
+  margin-top: 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+@keyframes shimmer {
+  0%, 100% { background-position: 0% center; }
+  50% { background-position: 100% center; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.1); }
+}
+
+/* ==================== 仪表盘布局 ==================== */
+.dashboard {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: var(--gap-3xl);
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem 3rem;
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==================== 玻璃拟态卡片组件 ==================== */
+.card {
+  background: var(--card-bg);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: var(--gap-4xl);
+  box-shadow: var(--shadow-card);
+  transition: border-color var(--transition-slow), box-shadow var(--transition-slow);
+}
+
+.card:hover {
+  border-color: rgba(34, 211, 238, 0.3);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.card__heading {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--neon-cyan);
+  margin-bottom: var(--gap-4xl);
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
+}
+
+/* ==================== 表单组件 ==================== */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-2xl);
+}
+
+.form__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+}
+
+.form__label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.form__input,
+.form__select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--input-bg);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
+  appearance: none;
+}
+
+.form__select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2322d3ee' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+}
+
+.form__input:focus,
+.form__select:focus {
+  border-color: var(--neon-purple);
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15), 0 0 20px rgba(168, 85, 247, 0.1);
+}
+
+.form__input::placeholder {
+  color: rgba(139, 139, 158, 0.5);
+}
+
+/* ==================== 按钮组件 ==================== */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 1.5rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform var(--transition-fast), box-shadow var(--transition-slow);
+}
+
+.btn--primary {
+  margin-top: 0.5rem;
+  background: linear-gradient(135deg, var(--neon-purple), #7c3aed);
+  color: #fff;
+  box-shadow: var(--shadow-button);
+}
+
+.btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-button-hover);
+}
+
+.btn--primary:active {
+  transform: translateY(0);
+}
+
+.btn__glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transform: translateX(-100%);
+  transition: transform var(--transition-slower);
+}
+
+.btn--primary:hover .btn__glow {
+  transform: translateX(100%);
+}
+
+/* ==================== 汇总统计组件 ==================== */
+.summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--gap-xl);
+  margin-top: var(--gap-4xl);
+  padding-top: var(--gap-4xl);
+  border-top: 1px solid var(--border-purple);
+}
+
+@media (max-width: 600px) {
+  .summary {
+    grid-template-columns: 1fr;
+  }
+}
+
+.summary__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+.summary__label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.summary__value {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.summary__value--expense {
+  color: var(--neon-pink);
+  text-shadow: 0 0 15px rgba(236, 72, 153, 0.4);
+}
+
+.summary__value--income {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 15px rgba(34, 211, 238, 0.4);
+}
+
+/* ==================== 图表布局 ==================== */
+.chart-wrap {
+  position: relative;
+  width: 100%;
+  max-height: 340px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chart-empty {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-top: var(--gap-xl);
+  opacity: 0.8;
+}
+
+.chart-empty.hidden {
+  display: none;
+}
+
+/* ==================== 历史账目卡片 ==================== */
+.card--history {
+  grid-column: 1 / -1;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.history-empty {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-top: var(--gap-xl);
+  opacity: 0.8;
+}
+
+.history-empty.hidden {
+  display: none;
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--gap-xl) 0;
+  border-bottom: 1px solid var(--border-purple);
+  transition: transform var(--transition-fast), background-color var(--transition-fast);
+  position: relative;
+}
+
+.history-item:last-child {
+  border-bottom: none;
+}
+
+.history-item:hover {
+  transform: scale(1.02);
+  background-color: var(--glow-cyan-focus);
+}
+
+.history-item__info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+.history-item__date {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.history-item__details {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-lg);
+}
+
+.history-item__category {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.history-item__type {
+  font-size: 0.8rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-xxs);
+  background: rgba(168, 85, 247, 0.15);
+  color: var(--neon-purple);
+  letter-spacing: 0.05em;
+}
+
+.history-item__amount {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-right: var(--gap-xl);
+}
+
+.history-item__delete {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid rgba(236, 72, 153, 0.3);
+  border-radius: var(--radius-xs);
+  background: rgba(15, 15, 22, 0.7);
+  color: rgba(236, 72, 153, 0.6);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  outline: none;
+}
+
+.history-item__delete:hover {
+  background: rgba(236, 72, 153, 0.15);
+  color: var(--neon-pink);
+  border-color: var(--neon-pink);
+  box-shadow: var(--shadow-delete-hover);
+  text-shadow: 0 0 8px rgba(236, 72, 153, 0.6);
+}
+
+/* ==================== 页脚区域 ==================== */
+.footer {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 1.5rem;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+}

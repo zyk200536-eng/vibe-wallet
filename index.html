@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vibe Wallet · 个人记账与图表看板</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="bg-glow bg-glow--purple"></div>
+  <div class="bg-glow bg-glow--cyan"></div>
+
+  <header class="header">
+    <h1 class="title">
+      <span class="title__icon">◈</span>
+      Vibe Wallet
+    </h1>
+    <p class="subtitle">个人记账 · 实时可视化</p>
+  </header>
+
+  <main class="dashboard">
+    <section class="card card--form">
+      <h2 class="card__heading">记一笔</h2>
+      <form id="recordForm" class="form" autocomplete="off">
+        <div class="form__group">
+          <label for="amount" class="form__label">金额</label>
+          <input
+            type="number"
+            id="amount"
+            class="form__input"
+            placeholder="0.00"
+            min="0.01"
+            step="0.01"
+            required
+          >
+        </div>
+
+        <div class="form__group">
+          <label for="category" class="form__label">分类</label>
+          <select id="category" class="form__select" required>
+            <option value="餐饮">餐饮</option>
+            <option value="娱乐">娱乐</option>
+            <option value="购物">购物</option>
+            <option value="收入">收入</option>
+          </select>
+        </div>
+
+        <div class="form__group">
+          <label for="type" class="form__label">类型</label>
+          <select id="type" class="form__select" required>
+            <option value="expense">支出</option>
+            <option value="income">收入</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn--primary">
+          <span class="btn__glow"></span>
+          记录一笔
+        </button>
+      </form>
+
+      <div class="summary">
+        <div class="summary__item">
+          <span class="summary__label">总支出</span>
+          <span id="totalExpense" class="summary__value summary__value--expense">¥0.00</span>
+        </div>
+        <div class="summary__item">
+          <span class="summary__label">总收入</span>
+          <span id="totalIncome" class="summary__value summary__value--income">¥0.00</span>
+        </div>
+        <div class="summary__item">
+          <span class="summary__label">当前结余</span>
+          <span id="totalBalance" class="summary__value">¥0.00</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card card--chart">
+      <h2 class="card__heading">支出分类占比</h2>
+      <div class="chart-wrap">
+        <canvas id="expenseChart" aria-label="支出分类饼状图"></canvas>
+      </div>
+      <p id="chartEmpty" class="chart-empty">暂无支出数据，记一笔开始吧 ✦</p>
+    </section>
+
+    <section class="card card--chart">
+      <h2 class="card__heading">月度消费趋势</h2>
+      <div class="chart-wrap">
+        <canvas id="lineChart" aria-label="月度消费趋势折线图"></canvas>
+      </div>
+      <p id="lineChartEmpty" class="chart-empty">暂无趋势数据，记一笔开始吧 ✦</p>
+    </section>
+
+    <section class="card card--history">
+      <h2 class="card__heading">历史账目明细</h2>
+      <div id="history-list" class="history-list"></div>
+      <p id="historyEmpty" class="history-empty">暂无账目记录 ✦</p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>数据保存在本地浏览器 · Vibe Wallet</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
