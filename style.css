@@ -56,6 +56,41 @@
   --transition-slower: 0.5s;
 }
 
+/* ==================== 明亮主题变量 ==================== */
+.light-theme {
+  /* 核心霓虹色系（调整为更深的颜色以保证对比度） */
+  --neon-purple: #7c3aed;
+  --neon-cyan: #0891b2;
+  --neon-pink: #db2777;
+  
+  /* 背景色系 */
+  --bg-deep: #f5f5f7;
+  --card-bg: rgba(255, 255, 255, 0.85);
+  --input-bg: rgba(245, 245, 247, 0.9);
+  
+  /* 文字色系 */
+  --text-primary: #1a1a2e;
+  --text-muted: #6b7280;
+  
+  /* 边框与装饰 */
+  --card-border: rgba(168, 85, 247, 0.2);
+  --border-purple: rgba(168, 85, 247, 0.1);
+  --border-purple-light: rgba(168, 85, 247, 0.05);
+  
+  /* 阴影效果 */
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 0 20px rgba(168, 85, 247, 0.04);
+  --shadow-card-hover: 0 8px 32px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 0 30px rgba(34, 211, 238, 0.06);
+  --shadow-button: 0 4px 20px rgba(168, 85, 247, 0.25);
+  --shadow-button-hover: 0 6px 28px rgba(168, 85, 247, 0.35);
+  --shadow-delete-hover: 0 0 15px rgba(236, 72, 153, 0.3);
+  
+  /* 光晕效果 */
+  --glow-purple: rgba(168, 85, 247, 0.08);
+  --glow-cyan: rgba(34, 211, 238, 0.05);
+  --glow-purple-focus: rgba(168, 85, 247, 0.1);
+  --glow-cyan-focus: rgba(34, 211, 238, 0.03);
+}
+
 /* ==================== 基础重置 ==================== */
 *,
 *::before,
@@ -78,6 +113,20 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   position: relative;
+  transition: background-color var(--transition-slow), color var(--transition-slow);
+}
+
+.card {
+  transition: background-color var(--transition-slow), border-color var(--transition-slow), box-shadow var(--transition-slow);
+}
+
+.form__input,
+.form__select {
+  transition: border-color var(--transition-normal), box-shadow var(--transition-normal), background-color var(--transition-slow), color var(--transition-slow);
+}
+
+.btn-secondary {
+  transition: all var(--transition-normal), background-color var(--transition-slow), color var(--transition-slow);
 }
 
 /* ==================== 环境光晕效果 ==================== */
@@ -111,6 +160,34 @@ body {
   z-index: 1;
   text-align: center;
   padding: 3rem 1.5rem 2rem;
+}
+
+.theme-btn {
+  position: absolute;
+  top: 2rem;
+  right: 1.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--neon-purple);
+  border-radius: var(--radius-sm);
+  background: rgba(168, 85, 247, 0.1);
+  color: var(--neon-purple);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  outline: none;
+  z-index: 10;
+}
+
+.theme-btn:hover {
+  background: rgba(168, 85, 247, 0.2);
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+  transform: translateY(-1px);
+}
+
+.theme-btn:active {
+  transform: translateY(0);
 }
 
 .title {

@@ -55,6 +55,7 @@
   const historyListEl = document.getElementById("history-list");
   const historyEmptyEl = document.getElementById("historyEmpty");
   const exportBtn = document.getElementById("export-btn");
+  const themeToggleBtn = document.getElementById("theme-toggle");
 
   // ==================== 数据持久化层 ====================
   /**
@@ -666,6 +667,69 @@
     URL.revokeObjectURL(url);
   }
 
+  /**
+   * 切换主题模式
+   * 在暗黑和明亮主题之间切换，并保存到 localStorage
+   */
+  function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+    const isLightTheme = document.body.classList.contains("light-theme");
+    
+    // 保存主题偏好到 localStorage
+    try {
+      localStorage.setItem("vibe-wallet-theme", isLightTheme ? "light" : "dark");
+    } catch (error) {
+      console.error("保存主题偏好失败:", error);
+    }
+    
+    // 更新图表颜色以适应新主题
+    updateChartColors(isLightTheme);
+  }
+
+  /**
+   * 加载保存的主题偏好
+   * 从 localStorage 读取并应用用户上次选择的主题
+   */
+  function loadTheme() {
+    try {
+      const savedTheme = localStorage.getItem("vibe-wallet-theme");
+      if (savedTheme === "light") {
+        document.body.classList.add("light-theme");
+        updateChartColors(true);
+      }
+    } catch (error) {
+      console.error("加载主题偏好失败:", error);
+    }
+  }
+
+  /**
+   * 更新图表颜色以适应主题
+   * 根据当前主题调整图表的文字颜色
+   * @param {boolean} isLightTheme - 是否为明亮主题
+   */
+  function updateChartColors(isLightTheme) {
+    const textColor = isLightTheme ? "#1a1a2e" : "#8b8b9e";
+    const gridColor = isLightTheme ? "rgba(168, 85, 247, 0.15)" : "rgba(168, 85, 247, 0.1)";
+    
+    // 更新饼状图颜色
+    if (chart) {
+      chart.options.plugins.legend.labels.color = textColor;
+      chart.options.plugins.tooltip.titleColor = isLightTheme ? "#1a1a2e" : "#f0f0f5";
+      chart.update();
+    }
+    
+    // 更新折线图颜色
+    if (lineChart) {
+      lineChart.options.plugins.legend.labels.color = textColor;
+      lineChart.options.plugins.tooltip.titleColor = isLightTheme ? "#1a1a2e" : "#f0f0f5";
+      lineChart.options.scales.x.ticks.color = textColor;
+      lineChart.options.scales.y.ticks.color = textColor;
+      lineChart.options.scales.x.grid.color = gridColor;
+      lineChart.options.scales.y.grid.color = gridColor;
+      lineChart.update();
+    }
+  }
+
   // ==================== 事件绑定 ====================
   form.addEventListener("submit", handleFormSubmit);
   typeSelect.addEventListener("change", syncCategoryWithType);
@@ -673,10 +737,15 @@
   if (exportBtn) {
     exportBtn.addEventListener("click", exportToCSV);
   }
+  
+  if (themeToggleBtn) {
+    themeToggleBtn.addEventListener("click", toggleTheme);
+  }
 
   // ==================== 应用初始化 ====================
   // 按顺序执行初始化流程
   loadRecords();
+  loadTheme();
   syncCategoryWithType();
   initChart();
   initLineChart();
